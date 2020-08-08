@@ -1,3 +1,8 @@
+wiki
+EMC info/src/EMC_info.egg-info
+
+#github .gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
