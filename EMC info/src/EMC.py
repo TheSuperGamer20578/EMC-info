@@ -120,10 +120,13 @@ class Town:
         self.residents = []
         for x in desc[5].split(", "):
             self.residents.append(Resident(x, rdata, data, self))
-        if nation:
-            self.nation = nation
-        else:
-            self.nation = Nation(desc[1][:-1].split("(")[1], data, rdata)
+        try:
+            if nation:
+                self.nation = nation
+            else:
+                self.nation = Nation(desc[1][:-1].split("(")[1], data, rdata)
+        except NationNotFound:
+            pass
         self.name = name
         self.mayor = Resident(desc[3], rdata, data, self)
         self.pvp = bool(desc[8][5:])
