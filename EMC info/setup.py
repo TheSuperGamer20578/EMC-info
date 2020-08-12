@@ -17,6 +17,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
         "Operating System :: OS Independent",
+        "Development Status :: 4 - Beta",
     ],
     url="https://github.com/TheSuperGamer20578/EMC-info/wiki",
     author="TheSuperGamer20578",
