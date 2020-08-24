@@ -33,7 +33,7 @@ def onlineResidents(tdata: dict = None, rdata: dict = None):
         except urllib.error.HTTPError:
             pass
     for x in rdata["players"]:
-        yield Resident(x["name"], rdata)
+        yield Resident(x["name"], tdata, rdata)
 
 
 class Resident:
@@ -148,7 +148,7 @@ class Town:
         except NationNotFound:
             pass
         self.name = name
-        self.mayor = Resident(desc[3], rdata, tdata, self)
+        self.mayor = Resident(desc[3], tdata, rdata, self)
         self.pvp = bool(desc[8][5:])
         self.mobSpawns = bool(desc[9][6:])
         self.explosions = bool(desc[11][11:])
