@@ -139,7 +139,7 @@ class Town:
                 del desc[i]
         self.residents = []
         for x in desc[5].split(", "):
-            self.residents.append(Resident(x, rdata, tdata, self))
+            self.residents.append(Resident(x, tdata, rdata, self))
         try:
             if nation:
                 self.nation = nation
