@@ -67,7 +67,8 @@ class Resident:
                         self.town = town
                     else:
                         self.town = Town(x[:-3], tdata, rdata, self)
-                    self.nation = self.town.nation
+                    if not self.town.nationless:
+                        self.nation = self.town.nation
                     self.townless = False
                     break
         else:
@@ -146,7 +147,9 @@ class Town:
             else:
                 self.nation = Nation(desc[1][:-1].split("(")[1], tdata, rdata)
         except NationNotFound:
-            pass
+            self.nationless = True
+        else:
+            self.nationless = False
         self.name = name
         self.mayor = Resident(desc[3], tdata, rdata, self)
         self.pvp = bool(desc[8][5:])
