@@ -8,12 +8,12 @@ async def a_get_data():
     async with aiohttp.ClientSession() as session:
         async with session.get('https://earthmc.net/map/up/world/earth/') as resp:
             if resp.status == 200:
-                rdata = await resp.text
+                rdata = json.loads(await resp.text())
             else:
                 return await a_get_data()
         async with session.get('https://earthmc.net/map/tiles/_markers_/marker_earth.json') as resp:
             if resp.status == 200:
-                tdata = await resp.text
+                tdata = json.loads(await resp.text())
             else:
                 return await a_get_data()
     data = (rdata, tdata)
