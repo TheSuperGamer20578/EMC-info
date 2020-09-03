@@ -21,5 +21,8 @@ setup(
     ],
     url="https://github.com/TheSuperGamer20578/EMC-info/wiki",
     author="TheSuperGamer20578",
-    author_email="emc@thesupergamer20578.ml"
+    author_email="emc@thesupergamer20578.ml",
+    install_requires=[
+              "aiohttp",
+          ],
 )
