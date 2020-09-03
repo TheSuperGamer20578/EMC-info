@@ -4,56 +4,27 @@ import urllib.request
 
 
 def get_data():
-    tdata, rdata = None, None
-    try:
-        while rdata is None:
-            rdata = json.loads(urllib.request.urlopen(
-                urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-    except urllib.error.HTTPError:
-        pass
-    try:
-        while tdata is None:
-            tdata = json.loads(urllib.request.urlopen(
-                urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-    except urllib.error.HTTPError:
-        pass
-    return tdata, rdata
+    data = (
+        json.loads(urllib.request.urlopen(
+            urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()),
+        json.loads(urllib.request.urlopen(
+            urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()))
+    return data
 
 
 # noinspection PyUnusedLocal
-def onlineResidents(tdata: dict = None, rdata: dict = None):
-    if rdata is None:
-        try:
-            while rdata is None:
-                rdata = json.loads(urllib.request.urlopen(
-                    urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-        except urllib.error.HTTPError:
-            pass
+def onlineResidents(data: tuple = None):
     for x in rdata["players"]:
-        yield Resident(x["name"], tdata, rdata)
+        yield Resident(x["name"], data)
 
 
 class Resident:
-    def __init__(self, name: str, tdata: dict = None, rdata: dict = None, town=None):
-        if rdata is None:
-            try:
-                while rdata is None:
-                    rdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
-        if tdata is None:
-            try:
-                while tdata is None:
-                    tdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
-                            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
+    def __init__(self, name: str, data: tuple = None, town=None):
+        if data is None:
+            data = get_data()
+        rdata, tdata = data[0], data[1]
         t = tdata["sets"]["townyPlugin.markerset"]["areas"]
         for x in t:
             if x.endswith("__0"):
@@ -66,7 +37,7 @@ class Resident:
                     if town:
                         self.town = town
                     else:
-                        self.town = Town(x[:-3], tdata, rdata)
+                        self.town = Town(x[:-3], data)
                     # if not self.town.nationless:
                     #     self.nation = self.town.nation
                     self.townless = False
@@ -84,26 +55,13 @@ class Resident:
         self.name = name
 
 
-def towns(tdata: dict = None, rdata: dict = None):
-    if rdata is None:
-        try:
-            while rdata is None:
-                rdata = json.loads(urllib.request.urlopen(
-                    urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-        except urllib.error.HTTPError:
-            pass
-    if tdata is None:
-        try:
-            while tdata is None:
-                tdata = json.loads(urllib.request.urlopen(
-                    urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
-                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-        except urllib.error.HTTPError:
-            pass
+def towns(data: tuple = None):
+    if data is None:
+        data = get_data()
+    rdata, tdata = data[0], data[1]
     for y in tdata["sets"]["townyPlugin.markerset"]["areas"]:
         if y.endswith("__0"):
-            yield Town(y[:-3], tdata, rdata)
+            yield Town(y[:-3], data)
 
 
 class TownNotFound(Exception):
@@ -111,24 +69,10 @@ class TownNotFound(Exception):
 
 
 class Town:
-    def __init__(self, name: str, tdata: dict = None, rdata: dict = None, nation=None):
-        if rdata is None:
-            try:
-                while rdata is None:
-                    rdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
-        if tdata is None:
-            try:
-                while tdata is None:
-                    tdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json",
-                                               headers={
-                                                   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
+    def __init__(self, name: str, data: tuple = None, nation=None):
+        if data is None:
+            data = get_data()
+        rdata, tdata = data[0], data[1]
         try:
             t = tdata["sets"]["townyPlugin.markerset"]["areas"][name + "__0"]
         except KeyError:
@@ -142,16 +86,16 @@ class Town:
             if nation:
                 self.nation = nation
             else:
-                self.nation = Nation(desc[1][:-1].split("(")[1], tdata, rdata)
+                self.nation = Nation(desc[1][:-1].split("(")[1], data)
         except NationNotFound:
             self.nationless = True
         else:
             self.nationless = False
         self.residents = []
         for x in desc[5].split(", "):
-            self.residents.append(Resident(x, tdata, rdata, self))
+            self.residents.append(Resident(x, data, self))
         self.name = name
-        self.mayor = Resident(desc[3], tdata, rdata, self)
+        self.mayor = Resident(desc[3], data, self)
         self.pvp = bool(desc[8][5:])
         self.mobSpawns = bool(desc[9][6:])
         self.explosions = bool(desc[11][11:])
@@ -166,24 +110,10 @@ class NationNotFound(Exception):
 
 
 class Nation:
-    def __init__(self, name: str, tdata: dict = None, rdata: dict = None):
-        if rdata is None:
-            try:
-                while rdata is None:
-                    rdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
-        if tdata is None:
-            try:
-                while tdata is None:
-                    tdata = json.loads(urllib.request.urlopen(
-                        urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json",
-                                               headers={
-                                                   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode())
-            except urllib.error.HTTPError:
-                pass
+    def __init__(self, name: str, data: tuple = None):
+        if data is None:
+            data = get_data()
+        rdata, tdata = data[0], data[1]
         t = tdata["sets"]["townyPlugin.markerset"]["areas"]
         self.towns = []
         for x in t:
@@ -194,7 +124,7 @@ class Nation:
                     if v == "":
                         del desc[i]
                 if x.endswith("__0") and name == desc[1][:-1].split("(")[1]:
-                    a = Town(x[:-3], tdata, rdata, self)
+                    a = Town(x[:-3], data, self)
                     self.towns.append(a)
                     if a.capital:
                         self.mapColor = t[x]["fillcolor"]
