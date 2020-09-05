@@ -55,8 +55,8 @@ class Resident:
                         self.town = town
                     else:
                         self.town = Town(x[:-3], data)
-                    # if not self.town.nationless:
-                    #     self.nation = self.town.nation
+                    if not self.town.nationless:
+                        self.nation = self.town.nation
                     self.townless = False
                     break
         else:
