@@ -99,6 +99,7 @@ class Town:
         for i, v in enumerate(desc):
             if v == "":
                 del desc[i]
+        self.nationless = False
         try:
             if nation:
                 self.nation = nation
@@ -106,18 +107,16 @@ class Town:
                 self.nation = Nation(desc[1][:-1].split("(")[1], data)
         except NationNotFound:
             self.nationless = True
-        else:
-            self.nationless = False
         self.residents = []
         for x in desc[5].split(", "):
             self.residents.append(Resident(x, data, self))
         self.name = name
         self.mayor = Resident(desc[3], data, self)
-        self.pvp = bool(desc[8][5:])
-        self.mobSpawns = bool(desc[9][6:])
-        self.explosions = bool(desc[11][11:])
-        self.fire = bool(desc[12][6:])
-        self.capital = bool(desc[13][9:])
+        self.pvp = desc[8][5:] == "True"
+        self.mobSpawns = desc[9][6:] == "True"
+        self.explosions = desc[11][11:] == "true"
+        self.fire = desc[12][6:] == "True"
+        self.capital = desc[13][9:] == "True"
         # TODO add position
         # TODO add size
 
