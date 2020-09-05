@@ -112,11 +112,11 @@ class Town:
             self.residents.append(Resident(x, data, self))
         self.name = name
         self.mayor = Resident(desc[3], data, self)
-        self.pvp = desc[8][5:] == "True"
-        self.mobSpawns = desc[9][6:] == "True"
-        self.explosions = desc[11][11:] == "true"
-        self.fire = desc[12][6:] == "True"
-        self.capital = desc[13][9:] == "True"
+        self.pvp = (desc[8][5:] == "true")
+        self.mobSpawns = (desc[9][6:] == "true")
+        self.explosions = (desc[11][11:] == "true")
+        self.fire = (desc[12][6:] == "true")
+        self.capital = (desc[13][9:] == "true")
         # TODO add position
         # TODO add size
 
