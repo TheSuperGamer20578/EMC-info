@@ -77,6 +77,15 @@ class Resident:
         # if town:
         #     self.town = town
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"""
+--- {self.name} ---
+
+"""  # TODO finish this
+
 
 def towns(data: tuple = None):
     if data is None:
@@ -124,6 +133,15 @@ class Town:
         # TODO add position
         # TODO add size
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"""
+--- {self.name} ---
+
+"""  # TODO finish this
+
 
 class NationNotFound(Exception):
     pass
@@ -161,3 +179,12 @@ class Nation:
         self.name = name
         # TODO add position
         # TODO add size
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"""
+--- {self.name} ---
+
+"""  # TODO finish this
