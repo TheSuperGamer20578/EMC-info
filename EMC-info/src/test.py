@@ -20,5 +20,15 @@ class Residents(unittest.TestCase):
         self.assertEqual(res.town.name, "Dharug")
 
 
+class Reliability(unittest.TestCase):
+    def test_get_data(self):
+        for x in range(100):
+            self.assertIsInstance(EMC.get_data(), tuple)
+
+    # def test_async_get_data(self):
+    #     for x in range(100):
+    #         self.assertIsInstance(asyncio.run(EMC.a_get_data()), tuple)
+
+
 if __name__ == '__main__':
     unittest.main()
