@@ -21,14 +21,22 @@ async def a_get_data():
 
 
 def get_data():
-    data = (
-        json.loads(urllib.request.urlopen(
-            urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()),
-        json.loads(urllib.request.urlopen(
-            urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()))
-    return data
+    try:
+        data = (
+            json.loads(urllib.request.urlopen(
+                urllib.request.Request(url="https://earthmc.net/map/up/world/earth/", headers={
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()),
+            json.loads(urllib.request.urlopen(
+                urllib.request.Request(url="https://earthmc.net/map/tiles/_markers_/marker_earth.json", headers={
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'})).read().decode()))
+        # t = {}
+        # for x in [i[:-3] for i in tdata["sets"]["townyPlugin.markerset"]["areas"] if i.endswith("__0")]:
+        #     td = tdata["sets"]["townyPlugin.markerset"]["areas"][x+"__0"]
+        #     desc = [v for v in re.split(r"<[^<>]*>", td["desc"]) if v != ""]
+        #     t[x] = td
+        return data
+    except urllib.error.HTTPError:
+        return get_data()
 
 
 # noinspection PyUnusedLocal
@@ -41,26 +49,21 @@ class Resident:
     def __init__(self, name: str, data: tuple = None, town=None):
         if data is None:
             data = get_data()
-        rdata, tdata = data[0], data[1]
+        rdata, tdata = data
         t = tdata["sets"]["townyPlugin.markerset"]["areas"]
-        for x in t:
-            if x.endswith("__0"):
-                desc = re.sub("<[^>]+>", "||", t[x]["desc"])
-                desc = desc.split("||")
-                for i, v in enumerate(desc):
-                    if v == "":
-                        del desc[i]
-                if x.endswith("__0") and name in desc[5].split(", "):
-                    if town:
-                        self.town = town
-                    else:
-                        self.town = Town(x[:-3], data)
+        if town:
+            self.town = town
+        else:
+            for town in [x for x in t if x.endswith("__0")]:
+                desc = [v for v in re.split(r"<[^<>]*>", t[town]["desc"]) if v != ""]
+                if name in desc[5].split(", "):
+                    self.town = Town(desc[1][:-1].split("(")[0].strip(), data)
                     if not self.town.nationless:
                         self.nation = self.town.nation
                     self.townless = False
                     break
-        else:
-            self.townless = True
+            else:
+                self.townless = True
         for x in rdata["players"]:
             if x["name"] == name:
                 r = x
@@ -70,15 +73,16 @@ class Resident:
         else:
             self.online = False
         self.name = name
+        # self.name = name
+        # if town:
+        #     self.town = town
 
 
 def towns(data: tuple = None):
     if data is None:
         data = get_data()
-    rdata, tdata = data[0], data[1]
-    for y in tdata["sets"]["townyPlugin.markerset"]["areas"]:
-        if y.endswith("__0"):
-            yield Town(y[:-3], data)
+    rdata, tdata = data
+    return [Town(x[:-3], data) for x in tdata["sets"]["townyPlugin.markerset"]["areas"] if x.endswith("__0")]
 
 
 class TownNotFound(Exception):
