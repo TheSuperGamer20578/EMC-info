@@ -3,6 +3,8 @@ import re
 import aiohttp
 import urllib.request
 
+from typing import Tuple
+
 
 async def a_get_data():
     async with aiohttp.ClientSession() as session:
@@ -188,3 +190,7 @@ class Nation:
 --- {self.name} ---
 
 """  # TODO finish this
+
+
+def mapLink(pos: Tuple[float, float], zoom: int = 6):
+    return f"https://earthmc.net/map/?zoom={zoom}&x={pos[0]}&z={pos[1]}"
