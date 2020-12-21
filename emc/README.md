@@ -1,0 +1,3 @@
+ ![Downloads](https://pepy.tech/badge/emc-info) ![Downloads/month](https://pepy.tech/badge/emc-info/month) ![Downloads/week](https://pepy.tech/badge/emc-info/week) \
+EarthMC is a large Minecraft server this package lets you get info about things on that server.\
+[Documentation](https://github.com/TheSuperGamer20578/EMC-info/wiki) **|** [Github](https://github.com/TheSuperGamer20578/EMC-info) **|** [Changelog](https://github.com/TheSuperGamer20578/EMC-info/releases)
