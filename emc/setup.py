@@ -5,9 +5,9 @@ with open("README.md", "r") as fh:
 
 setup(
     name="EMC-info",
-    version="0.9",
+    version="1.0",
     description="EarthMC is a large Minecraft server this package lets you get info about things on that server.",
-    py_modules=["EMC"],
+    py_modules=["emc"],
     package_dir={"": "src"},
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -23,7 +23,5 @@ setup(
     url="https://github.com/TheSuperGamer20578/EMC-info/wiki",
     author="TheSuperGamer20578",
     author_email="emc@thesupergamer20578.ml",
-    install_requires=[
-              "aiohttp",
-          ],
+    install_requires=[],
 )
