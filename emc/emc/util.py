@@ -10,14 +10,14 @@ _headers = {
         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
 
 
-def map_link(position: Tuple[float,float], zoom: int = 6) -> str:
+def map_link(position: Tuple[float, float], zoom: int = 6) -> str:
     """
     Returns a lint to the map at the specified position
     """
     return f"https://earthmc.net/map/?zoom={zoom}&x={position[0]}&z={position[1]}"
 
 
-def data() -> Tuple[dict,dict]:
+def data() -> Tuple[dict, dict]:
     """
     Returns the map data
     """
@@ -33,4 +33,4 @@ def data() -> Tuple[dict,dict]:
       }
     for town in towns:
         towns[town]["desc"] = [desc for desc in split(r"<[^<>]*>", towns[town]["desc"]) if desc != ""]
-    return (towns, resp_player.json())
+    return towns, resp_player.json()
