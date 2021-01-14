@@ -17,7 +17,7 @@ def map_link(position: Tuple[float, float], zoom: int = 6) -> str:
     return f"https://earthmc.net/map/?zoom={zoom}&x={position[0]}&z={position[1]}"
 
 
-def data() -> Tuple[dict, dict]:
+def get_data() -> Tuple[dict, dict]:
     """
     Returns the map data
     """
