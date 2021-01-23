@@ -1,7 +1,7 @@
 """
 Utilitys to help with other moduls
 """
-from typing import Tuple
+from typing import Tuple, Any
 from re import split
 from requests import get
 
@@ -10,7 +10,7 @@ _headers = {
         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
 
 
-def map_link(position: Tuple[float, ..., float], zoom: int = 6) -> str:
+def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
     """
     Returns a link to the map at the specified position
     """
