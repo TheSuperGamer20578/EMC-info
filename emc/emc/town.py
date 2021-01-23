@@ -28,7 +28,7 @@ class Town:
             self.nation = _nation
         else:
             self.nation = nation.Nation(
-                data[0][name]["desc"][0][:-1].split("(")[-1], data=data)
+                data[0][name]["desc"][0][:-1].split("(")[-1], data=data) or None
         self.colour = data[0][name]["fillcolor"]
         self.mayor = resident.Resident(data[0][name]["desc"][2], data=data,
                                        _town=self)
