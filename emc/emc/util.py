@@ -10,11 +10,11 @@ _headers = {
         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
 
 
-def map_link(position: Tuple[float, float], zoom: int = 6) -> str:
+def map_link(position: Tuple[float, ..., float], zoom: int = 6) -> str:
     """
-    Returns a lint to the map at the specified position
+    Returns a link to the map at the specified position
     """
-    return f"https://earthmc.net/map/?zoom={zoom}&x={position[0]}&z={position[1]}"
+    return f"https://earthmc.net/map/?zoom={zoom}&x={position[0]}&z={position[-1]}"
 
 
 def get_data() -> Tuple[dict, dict]:
