@@ -110,7 +110,7 @@ class Resident:
         if res_data is not None:
             self.online = True
             self.position = (res_data["x"], res_data["y"], res_data["z"])
-            self.hidden = True if self.position == (0, 64, 0) else False
+            self.hidden = self.position == (0, 64, 0)
         else:
             self.online = False
             self.position = None
