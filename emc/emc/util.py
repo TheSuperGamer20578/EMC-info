@@ -14,7 +14,8 @@ def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
     """
     Returns a link to the map at the specified position
     """
-    return f"https://earthmc.net/map/?zoom={zoom}&x={position[0]}&z={position[-1]}"
+    return ("https://earthmc.net/map/?zoom={}&x={}&z={}"
+            .format(zoom, position[0], position[-1]))
 
 
 def get_data() -> Tuple[dict, dict]:
@@ -26,7 +27,7 @@ def get_data() -> Tuple[dict, dict]:
     resp_player = get("https://earthmc.net/map/up/world/earth/",
                       headers=_headers)
     if not resp_town.status_code == 200 == resp_player.status_code:
-        return data()
+        return get_data()
     town_data = resp_town.json()["sets"]["townyPlugin.markerset"]["areas"]
     towns = {
       name[:-3]: town[1] for name, town in zip(town_data, town_data.items()) if name.endswith("__0")
