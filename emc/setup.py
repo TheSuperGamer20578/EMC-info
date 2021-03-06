@@ -23,5 +23,8 @@ setup(
     ],
     url="https://github.com/TheSuperGamer20578/EMC-info/",
     author="TheSuperGamer20578",
-    install_requires=["requests"]
+    install_requires=["requests"],
+    extras_require = {
+        "async": ["aiohttp"]
+    }
 )
