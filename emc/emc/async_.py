@@ -19,11 +19,11 @@ async def get_data() -> Tuple[dict, dict]:
                 session.get(URL_PLAYER, headers=HEADERS) as resp_player:
             if not resp_town.status == 200 == resp_player.status:
                 return await get_data
-            town_data = (await resp_town.json())["sets"]["townyPlugin.markerset"]["areas"]
+            town_data = (await resp_town.json(content_type="text/plain"))["sets"]["townyPlugin.markerset"]["areas"]
             towns = {
                 name[:-3]: town[1] for name, town in zip(town_data, town_data.items()) if name.endswith("__0")
             }
             for town in towns:
                 towns[town]["desc"] = [desc for desc in split(r"<[^<>]*>", towns[town]["desc"]) if desc != ""]
-            return towns, await resp_player.json()
+            return towns, await resp_player.json(content_type="text/plain")
 
