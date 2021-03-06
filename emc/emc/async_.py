@@ -14,7 +14,7 @@ URL_PLAYER = "https://earthmc.net/map/up/world/earth/"
 
 async def get_data() -> Tuple[dict, dict]:
     """Returns the map data"""
-    with ClientSession() as session:
+    async with ClientSession() as session:
         async with session.get(URL_TOWN, headers=HEADERS) as resp_town, \
                 session.get(URL_PLAYER, headers=HEADERS) as resp_player:
             if not resp_town.status == 200 == resp_player.status:
