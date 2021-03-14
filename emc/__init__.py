@@ -75,11 +75,11 @@ class Town:
         self.residents = [Resident(person, data=data, town=self)
                           for person in data[0][name]["desc"][4].split(", ")]
         self.flags = {
-            "pvp": data[0][name]["desc"][7],
-            "mobs": data[0][name]["desc"][8],
-            "explosions": data[0][name]["desc"][10],
-            "fire": data[0][name]["desc"][11],
-            "capital": data[0][name]["desc"][12]
+            "pvp": data[0][name]["desc"][7] == "pvp: true",
+            "mobs": data[0][name]["desc"][8] == "mobs: true",
+            "explosions": data[0][name]["desc"][10] == "explosion: true",
+            "fire": data[0][name]["desc"][11] == "fire: true",
+            "capital": data[0][name]["desc"][12] == "capital: true"
         }
 
     def __str__(self) -> str:
@@ -88,8 +88,8 @@ class Town:
     def __repr__(self) -> str:
         return (
                 "=== {0} ===\ncolour: {1}\nmayor: {2}\nresidents: {3}\nnation: {4}\n" +
-                "--- flags ---\n{5[pvp]}\n{5[mobs]}\n{5[explosions]}\n{5[fire]}\n" +
-                "{5[capital]}"
+                "--- flags ---\npvp: {5[pvp]}\nmobs: {5[mobs]}\n" +
+                "explosions: {5[explosions]}\nfire: {5[fire]}\ncapital: {5[capital]}"
         ).format(self.name, self.colour, self.mayor.name,
                  ", ".join([person.name for person in self.residents]),
                  self.nation.name, self.flags)
