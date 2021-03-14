@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="EMC-info",
-    version="1.1-rc8",
+    version="1.1",
     description="EarthMC is a large Minecraft server this package lets you get info about things on that server.",
     packages = ["emc"],
     long_description=long_description,
