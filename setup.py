@@ -1,12 +1,11 @@
 from setuptools import setup, find_packages
-from os import listdir
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="EMC-info",
-    version="1.1",
+    version="1.2",
     description="EarthMC is a large Minecraft server this package lets you get info about things on that server.",
     packages = ["emc"],
     long_description=long_description,
