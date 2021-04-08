@@ -59,6 +59,7 @@ class Town:
                  nation: Nation = None):
         if data is None:
             data = util.get_data()
+        name = name.lower()
         if name not in data[0]:
             raise exceptions.TownNotFoundException(
                 "The town {} could not be found".format(name))

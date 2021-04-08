@@ -21,7 +21,7 @@ async def get_data() -> Tuple[dict, dict]:
                 return await get_data()
             town_data = (await resp_town.json())["sets"]["townyPlugin.markerset"]["areas"]
             towns = {
-                name[:-3]: town[1] for name, town in zip(town_data, town_data.items()) if name.endswith("__0")
+                name[:-3].lower(): town[1] for name, town in zip(town_data, town_data.items()) if name.endswith("__0")
             }
             for town in towns:
                 towns[town]["desc"] = [desc for desc in split(r"<[^<>]*>", towns[town]["desc"]) if desc != ""]
