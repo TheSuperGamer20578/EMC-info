@@ -25,6 +25,10 @@ Installation
 
 Usage
 =====
+Importing::
+
+   import emc
+
 Getting info about a town and printing its mayor's name::
 
    town = emc.Town("town")
