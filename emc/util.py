@@ -1,5 +1,5 @@
 """
-Utilitys to help with other moduls
+Utilities to help with other modules
 """
 from typing import Tuple, Any
 from re import split
@@ -12,7 +12,12 @@ _headers = {
 
 def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
     """
-    Returns a link to the map at the specified position
+    Return a link to the map at the specified position
+
+    :param tuple[float,Any,float] position: The position to return a map link to, only the first and last items are used
+    :param int zoom: The zoom level, must be between 0 and 8
+    :returns: The link to the map
+    :rtype: str
     """
     return ("https://earthmc.net/map/?zoom={}&x={}&z={}"
             .format(zoom, position[0], position[-1]))
@@ -20,7 +25,10 @@ def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
 
 def get_data() -> Tuple[dict, dict]:
     """
-    Returns the map data
+    Returns the map data. Useful for making multiple requests
+
+    :returns: The map data
+    :rtype: tuple[dict,dict]
     """
     resp_town = get("https://earthmc.net/map/tiles/_markers_/marker_earth.json",
                     headers=_headers)

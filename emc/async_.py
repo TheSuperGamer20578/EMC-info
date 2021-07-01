@@ -1,4 +1,11 @@
-"""Async implementation of get_data"""
+"""
+Asynchronous implementation of get_data
+
+.. note::
+   Requires the ``async`` optional dependencies ::
+
+      pip install EMC-info[async]
+"""
 from typing import Tuple
 from re import split
 
@@ -13,7 +20,12 @@ URL_PLAYER = "https://earthmc.net/map/up/world/earth/"
 
 
 async def get_data() -> Tuple[dict, dict]:
-    """Returns the map data"""
+    """
+    Returns the map data. Useful for getting multiple thingys
+
+    :returns: The map data
+    :rtype: tuple[dict,dict]
+    """
     async with ClientSession() as session:
         async with session.get(URL_TOWN, headers=HEADERS) as resp_town, \
                 session.get(URL_PLAYER, headers=HEADERS) as resp_player:

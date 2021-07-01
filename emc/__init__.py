@@ -1,23 +1,37 @@
 """
 EarthMC is a large Minecraft server this package lets you get info about things on that server.
 """
+from __future__ import annotations
+
 from typing import Tuple
 
 from . import util, exceptions
 
+__version__ = "v1.2"
 __all__ = [
+    "__version__",
     "util",
     "exceptions",
     "Resident",
     "Town",
-    "Nation"
+    "Nation",
 ]
 
 
 class Nation:
     """
     A nation
+
+    :param str name: The name of the nation to get
+    :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+    :raises NationNotFoundException: The nation could not be found
     """
+    name: str  #: The name of the nation
+    towns: list[Town]  #: The towns in the nation
+    capital: Town  #: The capital of the nation
+    leader: Resident  #: The leader of the nation
+    colour: str  #: The colour that the towns in the nation appear on the map. Standard hex colour code
+    citizens: list[Resident]  #: The citizens of the nation
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -25,7 +39,7 @@ class Nation:
             data = util.get_data()
         towns = [town for town in data[0] if
                  data[0][town]["desc"][0][:-1].split(" (")[-1] == name]
-        if len(towns) <= 0:
+        if len(towns) <= 0 or name == "":
             raise exceptions.NationNotFoundException(
                 "The nation {} was not found".format(name))
         self.name = name
@@ -52,7 +66,18 @@ class Nation:
 class Town:
     """
     A town
+
+    :param str name: The name of the town to look for
+    :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+    :param nation: Internal use only, will be removed in v1.3
+    :raises TownNotFoundException: The town could not be found
     """
+    name: str  #: The name of the town
+    nation: Nation  #: The nation the town is in or None if the town is nationless
+    colour: str  #: The colour that the town appears on the map. Standard hex colour code
+    mayor: Resident  #: The mayor of the town
+    residents: list[Resident]  #: The residents of the town
+    flags: dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None,
@@ -98,8 +123,18 @@ class Town:
 
 class Resident:
     """
-    a person
+    A person
+
+    :param str name: The name of the resident to search for
+    :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+    :param town: Internal use only, will be removed in v1.3
     """
+    name: str  #: The name of the resident
+    online: bool  #: Weather or not the resident is online
+    position: tuple[int, int, int]  #: The position of the resident, (0, 64, 0) if hidden == True
+    hidden: bool  #: Weather or not the resident can be seen on the map
+    town: Town  #: The town that the resident belongs to, None if the resident is townless
+    nation: Nation  #: The nation that the resident's town is in, None if the resident is townless or the town nationless
 
     def __init__(self, name: str, *, data: Tuple[dict, dict] = None,
                  town: Town = None):

@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
+from emc import __version__
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="EMC-info",
-    version="1.2",
+    version=__version__[1:].replace("-", ""),
     description="EarthMC is a large Minecraft server this package lets you get info about things on that server.",
     packages = ["emc"],
     long_description=long_description,
