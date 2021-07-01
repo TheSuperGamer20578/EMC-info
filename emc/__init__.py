@@ -43,7 +43,7 @@ class Nation:
             raise exceptions.NationNotFoundException(
                 "The nation {} was not found".format(name))
         self.name = name
-        self.towns = [Town(town, data=data, nation=self) for town in towns]
+        self.towns = [Town._with_nation(town, data, self) for town in towns]
         self.capital = next(
             (town for town in self.towns if town.flags["capital"]))
         self.leader = self.capital.mayor
@@ -69,7 +69,6 @@ class Town:
 
     :param str name: The name of the town to look for
     :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-    :param nation: Internal use only, will be removed in v1.3
     :raises TownNotFoundException: The town could not be found
     """
     name: str  #: The name of the town
@@ -80,8 +79,7 @@ class Town:
     flags: dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
 
     def __init__(self, name: str, *,
-                 data: Tuple[dict, dict] = None,
-                 nation: Nation = None):
+                 data: Tuple[dict, dict] = None):
         if data is None:
             data = util.get_data()
         name = name.lower()
@@ -89,16 +87,13 @@ class Town:
             raise exceptions.TownNotFoundException(
                 "The town {} could not be found".format(name))
         self.name = data[0][name]["label"]
-        if nation is not None:
-            self.nation = nation
-        else:
+        if self.nation is None:
             self.nation = Nation(
                 data[0][name]["desc"][0][:-1].split("(")[-1],
                 data=data) or None
         self.colour = data[0][name]["fillcolor"]
-        self.mayor = Resident(data[0][name]["desc"][2], data=data,
-                              town=self)
-        self.residents = [Resident(person, data=data, town=self)
+        self.mayor = Resident._with_town(data[0][name]["desc"][2], data, self)
+        self.residents = [Resident._with_town(person, data, self)
                           for person in data[0][name]["desc"][4].split(", ")]
         self.flags = {
             "pvp": data[0][name]["desc"][7] == "pvp: true",
@@ -107,6 +102,13 @@ class Town:
             "fire": data[0][name]["desc"][11] == "fire: true",
             "capital": data[0][name]["desc"][12] == "capital: true"
         }
+
+    @classmethod
+    def _with_nation(cls, name, data, nation):
+        town = cls.__new__(cls)
+        town.nation = nation
+        town.__init__(name, data=data)
+        return town
 
     def __str__(self) -> str:
         return self.name
@@ -136,8 +138,7 @@ class Resident:
     town: Town  #: The town that the resident belongs to, None if the resident is townless
     nation: Nation  #: The nation that the resident's town is in, None if the resident is townless or the town nationless
 
-    def __init__(self, name: str, *, data: Tuple[dict, dict] = None,
-                 town: Town = None):
+    def __init__(self, name: str, *, data: Tuple[dict, dict] = None):
         if data is None:
             data = util.get_data()
         res_data = next((person for person in data[1]["players"] if
@@ -151,13 +152,18 @@ class Resident:
             self.online = False
             self.position = None
             self.hidden = True
-        if town is not None:
-            self.town = town
-        else:
+        if self.town is None:
             self.town = Town([town_name for town_name in data[0] if
                               name in data[0][town_name]["desc"][4]][0],
                              data=data) or None
         self.nation = self.town.nation or None
+
+    @classmethod
+    def _with_town(cls, name, data, town):
+        resident = cls.__new__(cls)
+        resident.town = town
+        resident.__init__(name, data=data)
+        return resident
 
     def __str__(self) -> str:
         return self.name
