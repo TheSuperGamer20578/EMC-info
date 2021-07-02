@@ -87,7 +87,7 @@ class Town:
             raise exceptions.TownNotFoundException(
                 "The town {} could not be found".format(name))
         self.name = data[0][name]["label"]
-        if self.nation is None:
+        if not hasattr(self, "nation"):
             self.nation = Nation(
                 data[0][name]["desc"][0][:-1].split("(")[-1],
                 data=data) or None
@@ -152,7 +152,7 @@ class Resident:
             self.online = False
             self.position = None
             self.hidden = True
-        if self.town is None:
+        if not hasattr(self, "town"):
             self.town = Town([town_name for town_name in data[0] if
                               name in data[0][town_name]["desc"][4]][0],
                              data=data) or None
