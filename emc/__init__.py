@@ -3,7 +3,7 @@ EarthMC is a large Minecraft server this package lets you get info about things 
 """
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Dict, List, Tuple
 
 from . import util, exceptions
 
@@ -27,11 +27,11 @@ class Nation:
     :raises NationNotFoundException: The nation could not be found
     """
     name: str  #: The name of the nation
-    towns: list[Town]  #: The towns in the nation
+    towns: List[Town]  #: The towns in the nation
     capital: Town  #: The capital of the nation
     leader: Resident  #: The leader of the nation
     colour: str  #: The colour that the towns in the nation appear on the map. Standard hex colour code
-    citizens: list[Resident]  #: The citizens of the nation
+    citizens: List[Resident]  #: The citizens of the nation
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -75,8 +75,8 @@ class Town:
     nation: Nation  #: The nation the town is in or None if the town is nationless
     colour: str  #: The colour that the town appears on the map. Standard hex colour code
     mayor: Resident  #: The mayor of the town
-    residents: list[Resident]  #: The residents of the town
-    flags: dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
+    residents: List[Resident]  #: The residents of the town
+    flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -133,7 +133,7 @@ class Resident:
     """
     name: str  #: The name of the resident
     online: bool  #: Weather or not the resident is online
-    position: tuple[int, int, int]  #: The position of the resident, (0, 64, 0) if hidden == True
+    position: Tuple[int, int, int]  #: The position of the resident, (0, 64, 0) if hidden == True
     hidden: bool  #: Weather or not the resident can be seen on the map
     town: Town  #: The town that the resident belongs to, None if the resident is townless
     nation: Nation  #: The nation that the resident's town is in, None if the resident is townless or the town nationless
