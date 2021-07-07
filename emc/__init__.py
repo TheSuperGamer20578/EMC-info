@@ -7,7 +7,7 @@ from typing import Tuple
 
 from . import util, exceptions
 
-__version__ = "v1.2.1"
+__version__ = "v1.3"
 __all__ = [
     "__version__",
     "util",
