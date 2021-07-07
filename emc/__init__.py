@@ -169,6 +169,20 @@ class Resident:
         resident.__init__(name, data=data)
         return resident
 
+    @classmethod
+    def all_online(cls, *, data: Tuple[dict, dict] = None):
+        """
+        Returns a list of all online players
+
+        :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+        :returns: List of all online players
+        :rtype: list[emc.Resident]
+        """
+        if data is None:
+            data = util.get_data()
+        return [cls(resident, data=data) for resident in
+                [person["account"] for person in data[1]["players"]]]
+
     def __str__(self) -> str:
         return self.name
 
