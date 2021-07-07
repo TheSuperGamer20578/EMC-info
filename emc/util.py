@@ -16,7 +16,7 @@ def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
 
     :param tuple[float,Any,float] position: The position to return a map link to, only the first and last items are used
     :param int zoom: The zoom level, must be between 0 and 8
-    :returns: The link to the map
+    :return: The link to the map
     :rtype: str
     """
     return ("https://earthmc.net/map/?zoom={}&x={}&z={}"
@@ -27,7 +27,7 @@ def get_data() -> Tuple[dict, dict]:
     """
     Returns the map data. Useful for making multiple requests
 
-    :returns: The map data
+    :return: The map data
     :rtype: tuple[dict,dict]
     """
     resp_town = get("https://earthmc.net/map/tiles/_markers_/marker_earth.json",

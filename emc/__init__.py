@@ -175,7 +175,7 @@ class Resident:
         Returns a list of all online players
 
         :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-        :returns: List of all online players
+        :return: List of all online players
         :rtype: list[emc.Resident]
         """
         if data is None:

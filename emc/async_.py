@@ -23,7 +23,7 @@ async def get_data() -> Tuple[dict, dict]:
     """
     Returns the map data. Useful for getting multiple thingys
 
-    :returns: The map data
+    :return: The map data
     :rtype: tuple[dict,dict]
     """
     async with ClientSession() as session:
