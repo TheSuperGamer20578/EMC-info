@@ -180,8 +180,20 @@ class Resident:
         """
         if data is None:
             data = util.get_data()
-        return [cls(resident, data=data) for resident in
-                [person["account"] for person in data[1]["players"]]]
+        return [cls(resident, data=data) for person in data[1]["players"] for resident in person["account"]]
+
+    @classmethod
+    def all(cls, *, data: Tuple[dict, dict] = None):
+        """
+        Returns a list of all players who are in a town
+
+        :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+        :return: List of all players who are in a town
+        :rtype: list[emc.Resident]
+        """
+        if data is None:
+            data = util.get_data()
+        return [resident for town in Town.all(data=data) for resident in town.residents]
 
     def __str__(self) -> str:
         return self.name
