@@ -88,9 +88,11 @@ class Town:
                 "The town {} could not be found".format(name))
         self.name = data[0][name]["label"]
         if not hasattr(self, "nation"):
-            self.nation = Nation(
-                data[0][name]["desc"][0][:-1].split("(")[-1],
-                data=data) or None
+            nation = data[0][name]["desc"][0][:-1].split("(")[-1]
+            if nation == "":
+                self.nation = None
+            else:
+                self.nation = Nation(nation, data=data)
         self.colour = data[0][name]["fillcolor"]
         self.mayor = Resident._with_town(data[0][name]["desc"][2], data, self)
         self.residents = [Resident._with_town(person, data, self)
@@ -153,10 +155,12 @@ class Resident:
             self.position = None
             self.hidden = True
         if not hasattr(self, "town"):
-            self.town = Town([town_name for town_name in data[0] if
-                              name in data[0][town_name]["desc"][4]][0],
-                             data=data) or None
-        self.nation = self.town.nation or None
+            self.town = next((Town(town_name, data=data) for town_name in data[0] if
+                              name in data[0][town_name]["desc"][4]), None)
+        if self.town is None:
+            self.nation = None
+        else:
+            self.nation = self.town.nation
 
     @classmethod
     def _with_town(cls, name, data, town):
