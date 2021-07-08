@@ -12,8 +12,8 @@ from re import split
 from aiohttp import ClientSession
 
 HEADERS = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) \
-        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
 
 URL_TOWN = "https://earthmc.net/map/tiles/_markers_/marker_earth.json"
 URL_PLAYER = "https://earthmc.net/map/up/world/earth/"
