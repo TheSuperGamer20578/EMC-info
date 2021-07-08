@@ -51,6 +51,19 @@ class Nation:
         self.citizens = [citizen for town in self.towns for citizen in
                          town.residents]
 
+    @classmethod
+    def all(cls, *, data: Tuple[dict, dict] = None):
+        """
+        Returns a list of all nations
+
+        :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+        :return: A list of all nations
+        :rtype: list[emc.Nation]
+        """
+        if data is None:
+            data = util.get_data()
+        return [cls(nation, data=data) for nation in {data[0][town]["desc"][0][:-1].split(" (")[-1] for town in data[0]}]
+
     def __str__(self) -> str:
         return self.name
 
@@ -111,6 +124,19 @@ class Town:
         town.nation = nation
         town.__init__(name, data=data)
         return town
+
+    @classmethod
+    def all(cls, *, data: Tuple[dict, dict] = None):
+        """
+        Returns a list of all towns
+
+        :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
+        :return: A list of all towns
+        :rtype: list[emc.Town]
+        """
+        if data is None:
+            data = util.get_data()
+        return [cls(town, data=data) for town in data[0]]
 
     def __str__(self) -> str:
         return self.name
