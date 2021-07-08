@@ -3,7 +3,7 @@ EarthMC is a large Minecraft server this package lets you get info about things 
 """
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
+from typing import Dict, Set, Tuple
 
 from . import util, exceptions
 
@@ -27,11 +27,11 @@ class Nation:
     :raises NationNotFoundException: The nation could not be found
     """
     name: str  #: The name of the nation
-    towns: List[Town]  #: The towns in the nation
+    towns: Set[Town]  #: The towns in the nation
     capital: Town  #: The capital of the nation
     leader: Resident  #: The leader of the nation
     colour: str  #: The colour that the towns in the nation appear on the map. Standard hex colour code
-    citizens: List[Resident]  #: The citizens of the nation
+    citizens: Set[Resident]  #: The citizens of the nation
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -43,26 +43,26 @@ class Nation:
             raise exceptions.NationNotFoundException(
                 "The nation {} was not found".format(name))
         self.name = name
-        self.towns = [Town._with_nation(town, data, self) for town in towns]
+        self.towns = {Town._with_nation(town, data, self) for town in towns}
         self.capital = next(
             (town for town in self.towns if town.flags["capital"]))
         self.leader = self.capital.mayor
         self.colour = self.capital.colour
-        self.citizens = [citizen for town in self.towns for citizen in
-                         town.residents]
+        self.citizens = {citizen for town in self.towns for citizen in
+                         town.residents}
 
     @classmethod
-    def all(cls, *, data: Tuple[dict, dict] = None):
+    def all(cls, *, data: Tuple[dict, dict] = None) -> Set[Nation]:
         """
-        Returns a list of all nations
+        Returns a set of all nations
 
         :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-        :return: A list of all nations
-        :rtype: list[emc.Nation]
+        :return: A set of all nations
+        :rtype: set[emc.Nation]
         """
         if data is None:
             data = util.get_data()
-        return [cls(nation, data=data) for nation in {data[0][town]["desc"][0][:-1].split(" (")[-1] for town in data[0]}]
+        return {cls(nation, data=data) for nation in {data[0][town]["desc"][0][:-1].split(" (")[-1] for town in data[0]}}
 
     def __str__(self) -> str:
         return self.name
@@ -88,7 +88,7 @@ class Town:
     nation: Nation  #: The nation the town is in or None if the town is nationless
     colour: str  #: The colour that the town appears on the map. Standard hex colour code
     mayor: Resident  #: The mayor of the town
-    residents: List[Resident]  #: The residents of the town
+    residents: Set[Resident]  #: The residents of the town
     flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
 
     def __init__(self, name: str, *,
@@ -108,8 +108,8 @@ class Town:
                 self.nation = Nation(nation, data=data)
         self.colour = data[0][name]["fillcolor"]
         self.mayor = Resident._with_town(data[0][name]["desc"][2], data, self)
-        self.residents = [Resident._with_town(person, data, self)
-                          for person in data[0][name]["desc"][4].split(", ")]
+        self.residents = {Resident._with_town(person, data, self)
+                          for person in data[0][name]["desc"][4].split(", ")}
         self.flags = {
             "pvp": data[0][name]["desc"][7] == "pvp: true",
             "mobs": data[0][name]["desc"][8] == "mobs: true",
@@ -126,13 +126,13 @@ class Town:
         return town
 
     @classmethod
-    def all(cls, *, data: Tuple[dict, dict] = None):
+    def all(cls, *, data: Tuple[dict, dict] = None) -> Set[Town]:
         """
-        Returns a list of all towns
+        Returns a set of all towns
 
         :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-        :return: A list of all towns
-        :rtype: list[emc.Town]
+        :return: A set of all towns
+        :rtype: set[emc.Town]
         """
         if data is None:
             data = util.get_data()
@@ -157,7 +157,6 @@ class Resident:
 
     :param str name: The name of the resident to search for
     :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-    :param town: Internal use only, will be removed in v1.3
     """
     name: str  #: The name of the resident
     online: bool  #: Weather or not the resident is online
@@ -196,30 +195,30 @@ class Resident:
         return resident
 
     @classmethod
-    def all_online(cls, *, data: Tuple[dict, dict] = None):
+    def all_online(cls, *, data: Tuple[dict, dict] = None) -> Set[Resident]:
         """
-        Returns a list of all online players
+        Returns a set of all online players
 
         :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-        :return: List of all online players
-        :rtype: list[emc.Resident]
+        :return: Set of all online players
+        :rtype: set[emc.Resident]
         """
         if data is None:
             data = util.get_data()
-        return [cls(resident, data=data) for person in data[1]["players"] for resident in person["account"]]
+        return {cls(resident, data=data) for person in data[1]["players"] for resident in person["account"]}
 
     @classmethod
-    def all(cls, *, data: Tuple[dict, dict] = None):
+    def all(cls, *, data: Tuple[dict, dict] = None) -> Set[Resident]:
         """
-        Returns a list of all players who are in a town
+        Returns a set of all players who are in a town
 
         :param tuple[dict,dict] data: Data from :meth:`emc.util.get_data`
-        :return: List of all players who are in a town
-        :rtype: list[emc.Resident]
+        :return: Set of all players who are in a town
+        :rtype: set[emc.Resident]
         """
         if data is None:
             data = util.get_data()
-        return [resident for town in Town.all(data=data) for resident in town.residents]
+        return {resident for town in Town.all(data=data) for resident in town.residents}
 
     def __str__(self) -> str:
         return self.name
