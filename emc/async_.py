@@ -2,9 +2,13 @@
 Asynchronous implementation of get_data
 
 .. note::
-   Requires the ``async`` optional dependencies ::
+   Requires the ``async`` optional dependencies::
 
       pip install EMC-info[async]
+
+   And must be imported separately::
+
+      from emc.async_ import get_data
 """
 from typing import Tuple
 from re import split

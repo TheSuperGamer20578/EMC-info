@@ -52,19 +52,14 @@ you want to get info about something, you can get the value of the parameter wit
 
 Asynchronous usage
 ------------------
-If you are using this package asynchronously you will need to manually get data using :func:`emc.async_.get_data` ::
+If you are using this package asynchronously you will need to manually get data using :func:`emc.async_.get_data`::
 
-   town = emc.Town("town", data=await emc.async_.get_data())
+   town = emc.Town("town", data=await get_data())
 
 .. note::
-   You may want to import :func:`emc.async_.get_data` so that you don't have to type ``emc.async_.`` every time you want
-   to get info about something ::
+   You need to import :func:`emc.async_.get_data`::
 
       from emc.async_ import get_data
-
-   Then you can get info like this::
-
-      town = emc.Town("town", data=await get_data())
 
 Help
 ====
