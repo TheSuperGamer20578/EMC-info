@@ -24,6 +24,8 @@ setup(
     url="https://github.com/TheSuperGamer20578/EMC-info/",
     author="TheSuperGamer20578",
     install_requires=["requests"],
+    tests_require=["pytest", "pytest-asyncio"],
+    test_suite="pytest test.py",
     extras_require={
         "async": ["aiohttp"]
     }
