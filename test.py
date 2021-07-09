@@ -47,8 +47,9 @@ class TestResident:
         assert res.nation.name == "Sudan"
         assert isinstance(res.online, bool)
         assert isinstance(res.hidden, bool)
-        assert isinstance(res.position, tuple)
-        assert len(res.position) == 3
+        assert isinstance(res.position, tuple) or res.position is None
+        if res.position is not None:
+            assert len(res.position) == 3
 
     def test_all_residents(self):
         """Test of :meth:`emc.Resident.all`"""

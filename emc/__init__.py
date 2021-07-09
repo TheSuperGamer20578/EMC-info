@@ -62,7 +62,7 @@ class Nation:
         """
         if data is None:
             data = util.get_data()
-        return {cls(nation, data=data) for nation in {data[0][town]["desc"][0][:-1].split(" (")[-1] for town in data[0]}}
+        return {cls(nation, data=data) for nation in {data[0][town]["desc"][0][:-1].split(" (")[-1] for town in data[0]} if nation != ""}
 
     def __str__(self) -> str:
         return self.name
@@ -136,7 +136,7 @@ class Town:
         """
         if data is None:
             data = util.get_data()
-        return [cls(town, data=data) for town in data[0]]
+        return {cls(town, data=data) for town in data[0]}
 
     def __str__(self) -> str:
         return self.name
@@ -160,7 +160,7 @@ class Resident:
     """
     name: str  #: The name of the resident
     online: bool  #: Weather or not the resident is online
-    position: Tuple[int, int, int]  #: The position of the resident, (0, 64, 0) if hidden == True
+    position: Tuple[int, int, int]  #: The position of the resident, (0, 64, 0) if hidden == True or None if online == False
     hidden: bool  #: Weather or not the resident can be seen on the map
     town: Town  #: The town that the resident belongs to, None if the resident is townless
     nation: Nation  #: The nation that the resident's town is in, None if the resident is townless or the town nationless
