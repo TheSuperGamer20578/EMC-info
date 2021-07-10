@@ -1,12 +1,23 @@
+import re
 from setuptools import setup, find_packages
-from emc import __version__
 
 with open("README.md") as fh:
     long_description = fh.read()
 
+with open("emc/__init__.py") as file:
+    pattern = re.compile(r'^__version__ = "v(\d*[1-9]\.\d*[1-9](?:\.\d*[1-9])*)(?:-((?:rc|b|a)\d+))?"$')
+    for line in file:
+        match = pattern.match(line)
+        if match is None:
+            continue
+        version = match.group(1) + (match.group(2) if match.group(2) is not None else "")
+        break
+    else:
+        raise RuntimeError("Could not find version in emc/__init__.py")
+
 setup(
     name="EMC-info",
-    version=__version__[1:].replace("-", ""),
+    version=version,
     description="EarthMC is a large Minecraft server this package lets you get info about things on that server.",
     packages=["emc"],
     long_description=long_description,

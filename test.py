@@ -9,10 +9,43 @@ Run through pytest::
 
    pytest test.py
 """
+import re
+
 import pytest
 
 import emc
 from emc.async_ import get_data
+
+
+class TestVersion:
+    def test_version(self):
+        assert re.match(r"v(\d*[1-9]\.\d*[1-9](?:\.\d*[1-9])*)(?:-((?:rc|b|a)\d+))?$", emc.__version__) is not None
+
+    def test_setup_version(self):
+        with open("emc/__init__.py") as file:
+            pattern = re.compile(r'^__version__ = "v(\d*[1-9]\.\d*[1-9](?:\.\d*[1-9])*)(?:-((?:rc|b|a)\d+))?"$')
+            for line in file:
+                match = pattern.match(line)
+                if match is None:
+                    continue
+                version = match.group(1) + (match.group(2) if match.group(2) is not None else "")
+                break
+            else:
+                raise AssertionError("Could not find version in emc/__init__.py with setup.py regex")
+            assert version == emc.__version__[1:].replace("-", "")
+
+    def test_docs_version(self):
+        with open("emc/__init__.py") as file:
+            pattern = re.compile(r'^__version__ = "(v\d*[1-9]\.\d*[1-9](?:\.\d*[1-9])*(?:-(?:rc|b|a)\d+)?)"$')
+            for line in file:
+                match = pattern.match(line)
+                if match is None:
+                    continue
+                version = match.group(1)
+                break
+            else:
+                raise AssertionError("Could not find version in emc/__init__.py with documentation regex")
+            assert version == emc.__version__
 
 
 class TestData:

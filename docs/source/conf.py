@@ -12,9 +12,9 @@
 #
 import os
 import sys
+import re
 from datetime import datetime
 sys.path.insert(0, os.path.abspath("../.."))
-from emc import __version__
 
 
 # -- Project information -----------------------------------------------------
@@ -24,7 +24,16 @@ copyright = str(datetime.today().year) + ", TheSuperGamer20578"
 author = "TheSuperGamer20578"
 
 # The full version, including alpha/beta/rc tags
-release = __version__
+with open("../../emc/__init__.py") as file:
+    pattern = re.compile(r'^__version__ = "(v\d*[1-9]\.\d*[1-9](?:\.\d*[1-9])*(?:-(?:rc|b|a)\d+)?)"$')
+    for line in file:
+        match = pattern.match(line)
+        if match is None:
+            continue
+        release = match.group(1)
+        break
+    else:
+        raise RuntimeError("Could not find version in ../../emc/__init__.py")
 
 
 # -- General configuration ---------------------------------------------------

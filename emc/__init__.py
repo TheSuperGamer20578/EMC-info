@@ -3,10 +3,6 @@ EarthMC is a large Minecraft server this package lets you get info about things 
 """
 from __future__ import annotations
 
-from typing import Dict, Set, Tuple
-
-from . import util, exceptions
-
 __version__ = "v1.3"
 __all__ = [
     "__version__",
@@ -16,6 +12,10 @@ __all__ = [
     "Town",
     "Nation",
 ]
+
+from typing import Dict, Set, Tuple
+
+from . import util, exceptions
 
 
 class Nation:
