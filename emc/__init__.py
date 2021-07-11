@@ -205,7 +205,7 @@ class Resident:
         """
         if data is None:
             data = util.get_data()
-        return {cls(resident, data=data) for person in data[1]["players"] for resident in person["account"]}
+        return {cls(resident["account"], data=data) for resident in data[1]["players"]}
 
     @classmethod
     def all(cls, *, data: Tuple[dict, dict] = None) -> Set[Resident]:
