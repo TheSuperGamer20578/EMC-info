@@ -15,6 +15,8 @@ __all__ = [
 
 from typing import Dict, Set, Tuple
 
+from shapely.geometry import Polygon
+
 from . import util, exceptions
 
 
@@ -121,6 +123,8 @@ class Town:
             "fire": data[0][name]["desc"][11] == "fire: true",
             "capital": data[0][name]["desc"][12] == "capital: true"
         }
+        polygon = Polygon(zip(data[0][name]["x"], data[0][name]["z"]))
+        self.area = int(polygon.area // 256)
 
     @classmethod
     def _with_nation(cls, name, data, nation):
