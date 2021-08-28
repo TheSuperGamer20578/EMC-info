@@ -51,6 +51,7 @@ class Nation:
         self.colour = self.capital.colour
         self.citizens = {citizen for town in self.towns for citizen in
                          town.residents}
+        self.area = sum(town.area for town in self.towns)
 
     @classmethod
     def all(cls, *, data: Tuple[dict, dict] = None) -> Set[Nation]:
