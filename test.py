@@ -113,6 +113,11 @@ class TestTown:
         assert town.colour == town.nation.colour
         assert isinstance(town.residents, set)
         assert len(town.residents) > 0
+        assert isinstance(town.area, int)
+        assert 0 < town.area < 1024
+        assert isinstance(town.location, tuple)
+        assert len(town.location) == 2
+        # TODO: make sure that position is correct
 
     def test_all_towns(self):
         """Test of :meth:`emc.Town.all`"""
@@ -137,6 +142,8 @@ class TestNation:
         assert len(nation.towns) > 0
         assert isinstance(nation.citizens, set)
         assert len(nation.citizens) > 0
+        assert isinstance(nation.area, int)
+        assert 0 < nation.area
 
     def test_all_nations(self):
         """Test of :meth:`emc.Nation.all`"""
