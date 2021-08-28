@@ -32,6 +32,7 @@ class Nation:
     leader: Resident  #: The leader of the nation
     colour: str  #: The colour that the towns in the nation appear on the map. Standard hex colour code
     citizens: Set[Resident]  #: The citizens of the nation
+    area: int  #: The area of the nation
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -90,6 +91,8 @@ class Town:
     mayor: Resident  #: The mayor of the town
     residents: Set[Resident]  #: The residents of the town
     flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
+    area: int  #: The area of the town
+    position: Tuple[int, int]  #: The position of the town TODO explain accuracy
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
