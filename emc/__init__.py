@@ -92,7 +92,7 @@ class Town:
     nation: Nation  #: The nation the town is in or None if the town is nationless
     colour: str  #: The colour that the town appears on the map. Standard hex colour code
     mayor: Resident  #: The mayor of the town
-    residents: Set[Resident]  #: The residents of the town
+    residents: List[Resident]  #: The residents of the town
     flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
     area: int  #: The area of the town
     position: Tuple[int, int]  #: The position of the center of the town
@@ -115,8 +115,8 @@ class Town:
                 self.nation = Nation(nation, data=data)
         self.colour = data[0][name]["fillcolor"]
         self.mayor = Resident._with_town(data[0][name]["desc"][2], data, self)
-        self.residents = {Resident._with_town(person, data, self)
-                          for person in data[0][name]["desc"][4].split(", ")}
+        self.residents = [Resident._with_town(person, data, self)
+                          for person in data[0][name]["desc"][4].split(", ")]
         self.flags = {
             "pvp": data[0][name]["desc"][7] == "pvp: true",
             "mobs": data[0][name]["desc"][8] == "mobs: true",

@@ -111,7 +111,7 @@ class TestTown:
         assert isinstance(town.colour, str)
         assert len(town.colour) == 7
         assert town.colour == town.nation.colour
-        assert isinstance(town.residents, set)
+        assert isinstance(town.residents, list)
         assert len(town.residents) > 0
         assert isinstance(town.area, int)
         assert 0 < town.area < 1024
