@@ -73,11 +73,12 @@ class Nation:
 
     def __repr__(self) -> str:
         return (
-                "=== {} ===\nTowns: {}\nCapital: {}\nLeader: {}\nColour: {}" +
-                "\nCitizens: {}"
+                "=== {} ===\nTowns: {}\nCapital: {}\nLeader: {}\nColour: {}"
+                "\nCitizens: {}\nArea: {}"
         ).format(self.name, ", ".join([town.name for town in self.towns]),
                  self.capital.name, self.leader.name, self.colour,
-                 ", ".join([citizen.name for citizen in self.citizens]))
+                 ", ".join([citizen.name for citizen in self.citizens]),
+                 self.area)
 
 
 class Town:
@@ -154,12 +155,13 @@ class Town:
 
     def __repr__(self) -> str:
         return (
-                "=== {0} ===\ncolour: {1}\nmayor: {2}\nresidents: {3}\nnation: {4}\n" +
-                "--- flags ---\npvp: {5[pvp]}\nmobs: {5[mobs]}\n" +
+                "=== {0} ===\ncolour: {1}\nmayor: {2}\nresidents: {3}\nnation: {4}\n"
+                "Area: {6}\nPosition: {7}\nBounds: ({8.min_x}-{8.max_x}, {8.min_y}-{8.max_y})\n"
+                "--- flags ---\npvp: {5[pvp]}\nmobs: {5[mobs]}\n"
                 "explosions: {5[explosions]}\nfire: {5[fire]}\ncapital: {5[capital]}"
         ).format(self.name, self.colour, self.mayor.name,
                  ", ".join([person.name for person in self.residents]),
-                 self.nation.name, self.flags)
+                 self.nation.name, self.flags, self.area, self.position, self.bounds)
 
 
 class Resident:
@@ -236,7 +238,7 @@ class Resident:
 
     def __repr__(self) -> str:
         return (
-                "=== {} ===\nOnline: {}\nPosition: {}\n" +
+                "=== {} ===\nOnline: {}\nPosition: {}\n"
                 "Hidden: {}\nTown: {}\nNation: {}"
         ).format(self.name, self.online, self.position,
                  self.hidden, self.town, self.nation)
