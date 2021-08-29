@@ -115,7 +115,7 @@ class TestTown:
         assert len(town.residents) > 0
         assert isinstance(town.area, int)
         assert 0 < town.area < 1024
-        assert isinstance(town.location, tuple)
+        assert isinstance(town.position, tuple)
         assert len(town.position) == 2
         assert isinstance(town.bounds, emc.util.Bounds)
 
