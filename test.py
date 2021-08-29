@@ -116,8 +116,8 @@ class TestTown:
         assert isinstance(town.area, int)
         assert 0 < town.area < 1024
         assert isinstance(town.location, tuple)
-        assert len(town.location) == 2
-        # TODO: make sure that position is correct
+        assert len(town.position) == 2
+        assert isinstance(town.bounds, emc.util.Bounds)
 
     def test_all_towns(self):
         """Test of :meth:`emc.Town.all`"""

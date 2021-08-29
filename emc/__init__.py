@@ -95,7 +95,7 @@ class Town:
     residents: Set[Resident]  #: The residents of the town
     flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
     area: int  #: The area of the town
-    position: Tuple[int, int]  #: The position of the town TODO explain accuracy
+    position: Tuple[int, int]  #: The position of the center of the town
     bounds: util.Bounds  #: The bounds of the town
 
     def __init__(self, name: str, *,
@@ -127,6 +127,7 @@ class Town:
         polygon = Polygon(zip(data[0][name]["x"], data[0][name]["z"]))
         self.area = int(polygon.area // 256)
         self.bounds = util.Bounds(*map(int, polygon.bounds))
+        self.position = (self.bounds.max_x//2 + self.bounds.min_x, self.bounds.max_y//2 + self.bounds.min_y)
 
     @classmethod
     def _with_nation(cls, name, data, nation):
