@@ -3,11 +3,15 @@ Utilities to help with other modules
 """
 from typing import Tuple, Any
 from re import split
+from collections import namedtuple
+
 from requests import get
 
 _headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) \
         AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
+
+Bounds = namedtuple("Bounds", ("min_x", "min_y", "max_x", "max_y"))  #: Namedtuple that represents the bounds of a town
 
 
 def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:

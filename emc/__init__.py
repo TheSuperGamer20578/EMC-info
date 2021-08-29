@@ -96,6 +96,7 @@ class Town:
     flags: Dict[str, bool]  #: The flags of the town. pvp, mobs, explosions, fire, capital
     area: int  #: The area of the town
     position: Tuple[int, int]  #: The position of the town TODO explain accuracy
+    bounds: util.Bounds  #: The bounds of the town
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -125,6 +126,7 @@ class Town:
         }
         polygon = Polygon(zip(data[0][name]["x"], data[0][name]["z"]))
         self.area = int(polygon.area // 256)
+        self.bounds = util.Bounds(*map(int, polygon.bounds))
 
     @classmethod
     def _with_nation(cls, name, data, nation):
