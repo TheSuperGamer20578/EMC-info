@@ -128,7 +128,7 @@ class Town:
         polygon = Polygon(zip(data[0][name]["x"], data[0][name]["z"]))
         self.area = int(polygon.area // 256)
         self.bounds = util.Bounds(*map(int, polygon.bounds))
-        self.position = (self.bounds.max_x//2 + self.bounds.min_x, self.bounds.max_y//2 + self.bounds.min_y)
+        self.position = ((self.bounds.max_x+self.bounds.min_x) // 2, (self.bounds.max_y+self.bounds.min_y) // 2)
 
     @classmethod
     def _with_nation(cls, name, data, nation):
