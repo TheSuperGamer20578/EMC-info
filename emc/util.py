@@ -31,15 +31,16 @@ def get_data() -> Tuple[dict, dict]:
     """
     Returns the map data. Useful for making multiple requests
 
+    :raises requests.HTTPError: Could not get data
     :return: The map data
     :rtype: tuple[dict,dict]
     """
     resp_town = get("https://earthmc.net/map/tiles/_markers_/marker_earth.json",
                     headers=_headers)
+    resp_town.raise_for_status()
     resp_player = get("https://earthmc.net/map/up/world/earth/",
                       headers=_headers)
-    if not resp_town.status_code == 200 == resp_player.status_code:
-        return get_data()
+    resp_player.raise_for_status()
     town_data = resp_town.json()["sets"]["townyPlugin.markerset"]["areas"]
     towns = {
       name[:-3].lower(): town[1] for name, town in zip(town_data, town_data.items()) if name.endswith("__0")
