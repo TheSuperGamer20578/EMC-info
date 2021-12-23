@@ -98,6 +98,7 @@ class Town:
     area: int  #: The area of the town
     position: Tuple[int, int]  #: The position of the center of the town
     bounds: util.Bounds  #: The bounds of the town
+    ruins: bool  #: True if this town in ruins, otherwise False
 
     def __init__(self, name: str, *,
                  data: Tuple[dict, dict] = None):
@@ -129,6 +130,8 @@ class Town:
         self.area = int(polygon.area // 256)
         self.bounds = util.Bounds(*map(int, polygon.bounds))
         self.position = ((self.bounds.max_x+self.bounds.min_x) // 2, (self.bounds.max_y+self.bounds.min_y) // 2)
+        self.ruins = len(self.residents) == 1 and self.mayor.npc and self.flags == {"pvp": True, "mobs": True, "explosions": True, "fire": True,
+                                                                                    "capital": False}
 
     @classmethod
     def _with_nation(cls, name, data, nation):
