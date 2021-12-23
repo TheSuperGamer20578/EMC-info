@@ -3,7 +3,7 @@ EarthMC is a large Minecraft server this package lets you get info about things 
 """
 from __future__ import annotations
 
-__version__ = "v1.4.1"
+__version__ = "v1.5"
 __all__ = [
     "__version__",
     "util",
