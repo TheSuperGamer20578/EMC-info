@@ -177,6 +177,7 @@ class Resident:
     hidden: bool  #: Weather or not the resident can be seen on the map
     town: Town  #: The town that the resident belongs to, None if the resident is townless
     nation: Nation  #: The nation that the resident's town is in, None if the resident is townless or the town nationless
+    npc: bool  #: Is this resident an NPC?
 
     def __init__(self, name: str, *, data: Tuple[dict, dict] = None):
         if data is None:
@@ -199,6 +200,7 @@ class Resident:
             self.nation = None
         else:
             self.nation = self.town.nation
+        self.npc = self.name.startswith("NPC") and self.name[3:].isdigit()
 
     @classmethod
     def _with_town(cls, name, data, town):
