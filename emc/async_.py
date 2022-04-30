@@ -19,8 +19,8 @@ HEADERS = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"}
 
-URL_TOWN = "https://earthmc.net/map/tiles/_markers_/marker_earth.json"
-URL_PLAYER = "https://earthmc.net/map/up/world/earth/"
+URL_TOWN = "https://earthmc.net/map/nova/tiles/_markers_/marker_earth.json"
+URL_PLAYER = "https://earthmc.net/map/nova/up/world/earth/"
 
 
 async def get_data() -> Tuple[dict, dict]:

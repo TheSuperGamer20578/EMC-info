@@ -35,10 +35,10 @@ def get_data() -> Tuple[dict, dict]:
     :return: The map data
     :rtype: tuple[dict,dict]
     """
-    resp_town = get("https://earthmc.net/map/tiles/_markers_/marker_earth.json",
+    resp_town = get("https://earthmc.net/map/nova/tiles/_markers_/marker_earth.json",
                     headers=_headers)
     resp_town.raise_for_status()
-    resp_player = get("https://earthmc.net/map/up/world/earth/",
+    resp_player = get("https://earthmc.net/map/nova/up/world/earth/",
                       headers=_headers)
     resp_player.raise_for_status()
     town_data = resp_town.json()["sets"]["townyPlugin.markerset"]["areas"]
