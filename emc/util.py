@@ -23,7 +23,7 @@ def map_link(position: Tuple[float, Any, float], zoom: int = 6) -> str:
     :return: The link to the map
     :rtype: str
     """
-    return ("https://earthmc.net/map/?zoom={}&x={}&z={}"
+    return ("https://earthmc.net/map/nova/?zoom={}&x={}&z={}"
             .format(zoom, position[0], position[-1]))
 
 
